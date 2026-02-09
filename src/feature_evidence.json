@@ -1,0 +1,74 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-upgrade-all-visual-art-assets-to-aaa-level-quality-while-keeping-the-current-pepe-toad-killer-crypto-meme-aesthetic-including-high-fidelity-backgrounds-in-game-sprites-and-ui-iconography-and-ensure-assets-look-crisp-on-high-dpi-retina-displays",
+      "featureTitle": "Upgrade all visual art assets to AAA-level quality while keeping the current Pepe/toad-killer crypto meme aesthetic, including high-fidelity backgrounds, in-game sprites, and UI iconography, and ensure assets look crisp on high-DPI/retina displays.",
+      "files": [
+        "frontend/index.html",
+        "frontend/src/assets/generatedAssets.ts",
+        "frontend/src/pages/LandingScreen.tsx",
+        "frontend/src/pages/ResultsScreen.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-improve-the-in-game-canvas-rendering-fidelity-in-the-2d-renderer-to-feel-aaa-incorporate-more-detailed-sprite-rendering-for-player-tokens-hazards-better-composition-lighting-e-g-layered-parallax-background-feel-vignette-atmospheric-overlay-and-higher-quality-particles-vfx-while-honoring-the-existing-reduced-motion-setting",
+      "featureTitle": "Improve the in-game canvas rendering fidelity in the 2D renderer to feel 'AAA': incorporate more detailed sprite rendering for player/tokens/hazards, better composition/lighting (e.g., layered/parallax background feel, vignette/atmospheric overlay), and higher-quality particles/VFX, while honoring the existing Reduced Motion setting.",
+      "files": [
+        "frontend/src/game/GameCanvas.tsx",
+        "frontend/src/game/fx/particles.ts",
+        "frontend/src/game/renderer.ts",
+        "frontend/src/game/rendererAssets.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-upgrade-the-ui-presentation-to-aaa-level-visual-polish-across-landing-hud-results-leaderboard-settings-and-shop-screens-by-using-higher-quality-graphical-elements-e-g-premium-backgrounds-overlays-and-a-cohesive-custom-icon-set-where-appropriate-while-keeping-all-existing-ui-flows-and-english-user-facing-text-intact",
+      "featureTitle": "Upgrade the UI presentation to AAA-level visual polish across Landing, HUD, Results, Leaderboard, Settings, and Shop screens by using higher-quality graphical elements (e.g., premium backgrounds/overlays and a cohesive custom icon set where appropriate) while keeping all existing UI flows and English user-facing text intact.",
+      "files": [
+        "frontend/src/components/GameHUD.tsx",
+        "frontend/src/components/GeneratedIcon.tsx",
+        "frontend/src/components/LeaderboardPanel.tsx",
+        "frontend/src/components/SettingsDialog.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/GameScreen.tsx",
+        "frontend/src/progression/UnlocksShop.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "AAA-quality graphics upgrade for Pepe Survival (2D)",
+  "requirements": [
+    {
+      "id": "REQ-14",
+      "summary": "Replace/retouch all core art assets with AAA-quality static raster graphics and ensure crisp rendering on high-DPI displays.",
+      "acceptanceCriteria": [
+        "New high-fidelity raster assets exist under frontend/public/assets/generated using the filenames specified in this build request.",
+        "All upgraded assets render sharply (no visible pixelation) at common desktop and mobile resolutions.",
+        "No assets are served through the backend; all art is loaded from static files.",
+        "The game remains playable and performance remains stable (no obvious frame drops attributable to rendering changes)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/game-logo.dim_512x512.png",
+          "operation": "modify",
+          "description": "Replace with the rethemed AAA-quality Pepe/toad-killer crypto meme logo (keep exact filename and static serving)."
+        },
+        {
+          "path": "frontend/public/assets/generated/menu-background.dim_1920x1080.png",
+          "operation": "modify",
+          "description": "Replace with the rethemed AAA-quality menu/results background (keep exact filename and static serving)."
+        },
+        {
+          "path": "frontend/public/assets/generated/ingame-background.dim_1920x1080.png",
+          "operation": "modify",
+          "description": "Replace with higher-detail in-game background (same composition; keep exact filename and static serving)."
+        },
+        {
+          "path": "frontend/public/assets/generated/token-icon.dim_256x256.png",
+          "operation": "modify",
+          "description": "Replace with higher-detail token icon (keep silhouette readability; keep exact filename and static serving)."
+        },
+        {
+          "path": "frontend/public/assets/generated/toad-hazard-icon.dim_256x256.png",
+          "operation": "modify",
+          "description": "Replace with higher-detail toad hazard icon (keep silhouette readability; keep exact filename and static serving)."
+        },
+        {
+          "path": "frontend/public/assets/generated/ui-icons-sheet.dim_1024x1024.png",
+          "operation": "modify",
+          "description": "Update/standardize the cohesive custom icon sheet to match the AAA Pepe/toad-killer aesthetic (static file; keep exact filename)."
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Add static asset preloads for frontend/public/assets/generated/game-logo.dim_512x512.png, menu-background.dim_1920x1080.png, ingame-background.dim_1920x1080.png, token-icon.dim_256x256.png, toad-hazard-icon.dim_256x256.png, and ui-icons-sheet.dim_1024x1024.png to reduce perceived loading and support crisp first paint."
+        },
+        {
+          "path": "frontend/src/assets/generatedAssets.ts",
+          "operation": "create",
+          "description": "Create a single source-of-truth module exporting the static paths for all generated assets (logo, backgrounds, icons, sheet) so all UI/canvas references remain consistent and remain static-file-only."
+        },
+        {
+          "path": "frontend/src/pages/LandingScreen.tsx",
+          "operation": "modify",
+          "description": "Wire upgraded static assets via the generated assets module: use frontend/public/assets/generated/menu-background.dim_1920x1080.png and frontend/public/assets/generated/game-logo.dim_512x512.png with sizing/attributes that preserve sharpness on retina/high-DPI displays."
+        },
+        {
+          "path": "frontend/src/pages/ResultsScreen.tsx",
+          "operation": "modify",
+          "description": "Wire upgraded static background via the generated assets module: use frontend/public/assets/generated/menu-background.dim_1920x1080.png for premium results presentation while keeping all existing flows and English text unchanged."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Increase 2D canvas renderer fidelity with higher-quality sprite rendering, layered/parallax composition, atmospheric overlays, and improved particles/VFX while respecting Reduced Motion and preserving gameplay logic.",
+      "acceptanceCriteria": [
+        "The canvas scene (background, player, obstacles, power-ups, particles) no longer relies on simple fallback circles/glows when the new assets are available.",
+        "When Reduced Motion is enabled, any new camera/scene motion effects (e.g., shake/parallax) are disabled or substantially reduced, consistent with existing behavior.",
+        "Visual effects upgrades do not introduce gameplay logic changes (collision and scoring behavior remain unchanged)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/game/GameCanvas.tsx",
+          "operation": "modify",
+          "description": "Improve canvas high-DPI/retina rendering by adopting devicePixelRatio-aware sizing and consistent logical units for rendering; ensure resize handling keeps output crisp and avoids performance regressions."
+        },
+        {
+          "path": "frontend/src/game/renderer.ts",
+          "operation": "modify",
+          "description": "Upgrade visual rendering only (no gameplay logic changes): render layered/parallax background using frontend/public/assets/generated/ingame-background.dim_1920x1080.png when Reduced Motion is off; add vignette/atmospheric overlay; switch player rendering from simple shapes to a sprite-based draw using frontend/public/assets/generated/ui-icons-sheet.dim_1024x1024.png; enhance token/hazard sprite lighting/composition using frontend/public/assets/generated/token-icon.dim_256x256.png and frontend/public/assets/generated/toad-hazard-icon.dim_256x256.png."
+        },
+        {
+          "path": "frontend/src/game/fx/particles.ts",
+          "operation": "modify",
+          "description": "Increase particle/VFX quality (visual-only): add support for richer particle attributes (e.g., size curves, rotation, soft fade) while keeping particle spawning semantics and gameplay outcomes unchanged."
+        },
+        {
+          "path": "frontend/src/game/rendererAssets.ts",
+          "operation": "create",
+          "description": "Create a lightweight renderer-focused asset cache/loader that centralizes loading for frontend/public/assets/generated/ingame-background.dim_1920x1080.png, token-icon.dim_256x256.png, toad-hazard-icon.dim_256x256.png, and ui-icons-sheet.dim_1024x1024.png to avoid redundant Image construction and help maintain stable frame times."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Polish UI to AAA-level presentation across Landing, HUD, Results, Leaderboard, Settings, and Shop using premium backgrounds/overlays and cohesive custom icons while keeping all flows and English text intact.",
+      "acceptanceCriteria": [
+        "Landing and Results screens use the upgraded high-fidelity menu background and logo assets from frontend/public/assets/generated.",
+        "HUD/Dialogs/Shop/Leaderboard maintain the same functionality and navigation, but visuals look more premium (improved iconography/visual detail) without changing feature behavior.",
+        "All user-facing text remains English (no new non-English strings introduced)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/GeneratedIcon.tsx",
+          "operation": "create",
+          "description": "Add a small UI helper that renders icons from frontend/public/assets/generated/ui-icons-sheet.dim_1024x1024.png (custom cohesive iconography) so HUD/dialogs can reduce reliance on generic iconography while preserving existing behavior."
+        },
+        {
+          "path": "frontend/src/components/GameHUD.tsx",
+          "operation": "modify",
+          "description": "Upgrade HUD visual polish without changing functionality: use the GeneratedIcon (from ui-icons-sheet.dim_1024x1024.png) for key HUD iconography, refine panel treatments (premium overlays), and keep all existing labels/values and interactions unchanged."
+        },
+        {
+          "path": "frontend/src/components/LeaderboardPanel.tsx",
+          "operation": "modify",
+          "description": "Upgrade leaderboard visuals while keeping tabs/data the same: incorporate GeneratedIcon-based iconography and premium header/background treatments consistent with the upgraded menu aesthetic."
+        },
+        {
+          "path": "frontend/src/components/SettingsDialog.tsx",
+          "operation": "modify",
+          "description": "Upgrade settings dialog styling and iconography using GeneratedIcon while keeping the same toggles, key binding inputs, and English text unchanged; ensure Reduced Motion messaging remains consistent with existing behavior."
+        },
+        {
+          "path": "frontend/src/progression/UnlocksShop.tsx",
+          "operation": "modify",
+          "description": "Upgrade shop visuals with cohesive custom iconography (GeneratedIcon) and premium card styling while keeping costs, unlock flow, and English strings unchanged."
+        },
+        {
+          "path": "frontend/src/pages/GameScreen.tsx",
+          "operation": "modify",
+          "description": "Polish pause overlay presentation (premium overlay treatment) and align iconography with the custom icon set while keeping pause/resume/settings flows unchanged."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add small global styling adjustments to support the AAA UI look (e.g., consistent backdrop/overlay treatments and image rendering defaults) without altering user-facing text or immutable UI component paths."
+        }
+      ]
+    }
+  ]
+}

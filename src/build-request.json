@@ -1,0 +1,82 @@
+{
+  "kind": "build_request",
+  "title": "Upgrade all game graphics to AAA-level quality",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-14",
+      "text": "Upgrade all visual art assets to AAA-level quality while keeping the current Pepe/toad-killer crypto meme aesthetic, including high-fidelity backgrounds, in-game sprites, and UI iconography, and ensure assets look crisp on high-DPI/retina displays.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-3"
+        ],
+        "quotes": [
+          "bring all the graphics to AAA level quality"
+        ]
+      },
+      "acceptanceCriteria": [
+        "New high-fidelity raster assets exist under frontend/public/assets/generated using the filenames specified in this build request.",
+        "All upgraded assets render sharply (no visible pixelation) at common desktop and mobile resolutions.",
+        "No assets are served through the backend; all art is loaded from static files.",
+        "The game remains playable and performance remains stable (no obvious frame drops attributable to rendering changes)."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Improve the in-game canvas rendering fidelity in the 2D renderer to feel 'AAA': incorporate more detailed sprite rendering for player/tokens/hazards, better composition/lighting (e.g., layered/parallax background feel, vignette/atmospheric overlay), and higher-quality particles/VFX, while honoring the existing Reduced Motion setting.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-3"
+        ],
+        "quotes": [
+          "bring all the graphics to AAA level quality"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The canvas scene (background, player, obstacles, power-ups, particles) no longer relies on simple fallback circles/glows when the new assets are available.",
+        "When Reduced Motion is enabled, any new camera/scene motion effects (e.g., shake/parallax) are disabled or substantially reduced, consistent with existing behavior.",
+        "Visual effects upgrades do not introduce gameplay logic changes (collision and scoring behavior remain unchanged)."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Upgrade the UI presentation to AAA-level visual polish across Landing, HUD, Results, Leaderboard, Settings, and Shop screens by using higher-quality graphical elements (e.g., premium backgrounds/overlays and a cohesive custom icon set where appropriate) while keeping all existing UI flows and English user-facing text intact.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-3"
+        ],
+        "quotes": [
+          "bring all the graphics to AAA level quality"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Landing and Results screens use the upgraded high-fidelity menu background and logo assets from frontend/public/assets/generated.",
+        "HUD/Dialogs/Shop/Leaderboard maintain the same functionality and navigation, but visuals look more premium (improved iconography/visual detail) without changing feature behavior.",
+        "All user-facing text remains English (no new non-English strings introduced)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui/*.",
+    "Do not serve images through the backend; all graphics must be static assets under frontend/public/assets/generated and referenced from the frontend.",
+    "Respect the existing single-actor backend architecture; no backend changes are required for this graphics-only request."
+  ],
+  "nonGoals": [
+    "Do not change gameplay rules, difficulty curve, scoring, progression logic, or leaderboard logic as part of this request.",
+    "Do not add third-party services or external asset hosting/CDNs.",
+    "Do not introduce new authentication methods beyond the existing Internet Identity integration."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": [
+      "Retheme the existing game logo to a Pepe/toad-killer crypto meme aesthetic (game-logo.dim_512x512.png > game-logo.dim_512x512.png)",
+      "Retheme the existing menu/results background to a Pepe/toad-killer crypto meme aesthetic (menu-background.dim_1920x1080.png > menu-background.dim_1920x1080.png)",
+      "Increase detail/texture and add premium lighting/shading while keeping the same composition (ingame-background.dim_1920x1080.png > ingame-background.dim_1920x1080.png)",
+      "Increase detail/texture and add premium lighting/shading while keeping the same silhouette readability (token-icon.dim_256x256.png > token-icon.dim_256x256.png)",
+      "Increase detail/texture and add premium lighting/shading while keeping the same silhouette readability (toad-hazard-icon.dim_256x256.png > toad-hazard-icon.dim_256x256.png)"
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-09T21:19:13.843Z",
+  "summary": "Diff adds a generated asset registry and canvas asset loader, upgrades canvas rendering (retina scaling, parallax/vignette, enhanced particles, sprite-based token/hazard rendering), and applies more “premium” UI styling plus usage of generated logo/background on Landing and Results. However, the diff does not show the required raster assets being added under frontend/public/assets/generated, and the renderer does not load/render a player sprite from generated assets. Diff also introduces additional generated assets and copy changes not requested.",
+  "missing_requirements": [
+    {
+      "id": "REQ-14",
+      "requirement": "New high-fidelity raster assets exist under frontend/public/assets/generated using the filenames specified in this build request (logo, menu background, ingame background, token icon, toad hazard icon).",
+      "reason": "The diff only shows TypeScript/CSS/HTML changes referencing these files, but no evidence of the actual raster files being added/replaced under frontend/public/assets/generated.",
+      "evidence": [
+        "frontend/src/assets/generatedAssets.ts",
+        "frontend/index.html"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "requirement": "Canvas scene should use detailed sprite rendering for the player (not just tokens/hazards) when new assets are available, avoiding simple fallback circles/glows.",
+      "reason": "The renderer asset loader only loads background, token, hazard, and a UI sheet—no player sprite asset is defined/loaded, so player-specific sprite rendering from generated assets is not implemented in the shown changes.",
+      "evidence": [
+        "frontend/src/assets/generatedAssets.ts",
+        "frontend/src/game/rendererAssets.ts",
+        "frontend/src/game/renderer.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Introduced an additional generated asset (ui-icons-sheet.dim_1024x1024.png) and a sprite-sheet icon component, beyond the explicitly requested filenames.",
+      "reason": "BuildRequest specifies upgrading five named files; the diff adds a new ui icon sheet and code to consume it, which is not requested.",
+      "evidence": [
+        "frontend/src/assets/generatedAssets.ts",
+        "frontend/src/components/GeneratedIcon.tsx",
+        "frontend/src/game/rendererAssets.ts",
+        "frontend/index.html"
+      ]
+    },
+    {
+      "description": "Changed perk names/descriptions to new meme/crypto-themed copy (user-facing text changes).",
+      "reason": "BuildRequest REQ-16 requires keeping all existing UI flows and English user-facing text intact; the diff summary indicates perk text was changed (even if still English).",
+      "evidence": [
+        "frontend-file-summaries.txt (mentions frontend/src/progression/perks.ts copy changes)"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/index.html",
+    "frontend/src/assets/generatedAssets.ts",
+    "frontend/src/components/GameHUD.tsx",
+    "frontend/src/components/GeneratedIcon.tsx",
+    "frontend/src/components/LeaderboardPanel.tsx",
+    "frontend/src/components/SettingsDialog.tsx",
+    "frontend/src/game/GameCanvas.tsx",
+    "frontend/src/game/fx/particles.ts",
+    "frontend/src/game/renderer.ts",
+    "frontend/src/game/rendererAssets.ts",
+    "frontend/src/index.css",
+    "frontend/src/pages/GameScreen.tsx",
+    "frontend/src/pages/LandingScreen.tsx",
+    "frontend/src/pages/ResultsScreen.tsx",
+    "frontend/src/progression/UnlocksShop.tsx",
+    "project_state.json"
+  ]
+}
