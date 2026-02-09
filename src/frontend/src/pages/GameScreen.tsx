@@ -17,6 +17,7 @@ export default function GameScreen({ onGameOver }: GameScreenProps) {
   const [streak, setStreak] = useState(0);
   const [coins, setCoins] = useState(0);
   const [survivalTime, setSurvivalTime] = useState(0);
+  const [multiplier, setMultiplier] = useState(1);
   const { settings } = useSettings();
 
   const handlePause = () => {
@@ -43,7 +44,7 @@ export default function GameScreen({ onGameOver }: GameScreenProps) {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-background">
+    <div className="relative w-full overflow-hidden bg-background" style={{ height: 'var(--app-height, 100vh)' }}>
       <GameCanvas
         isPaused={isPaused}
         onGameOver={handleGameOver}
@@ -51,6 +52,7 @@ export default function GameScreen({ onGameOver }: GameScreenProps) {
         onStreakUpdate={setStreak}
         onCoinsUpdate={setCoins}
         onTimeUpdate={setSurvivalTime}
+        onMultiplierUpdate={setMultiplier}
         reducedMotion={settings.reducedMotion}
         soundEnabled={!settings.soundMuted}
       />
@@ -60,6 +62,7 @@ export default function GameScreen({ onGameOver }: GameScreenProps) {
         streak={streak}
         coins={coins}
         survivalTime={survivalTime}
+        multiplier={multiplier}
         onPause={handlePause}
         onSettings={handleSettings}
       />

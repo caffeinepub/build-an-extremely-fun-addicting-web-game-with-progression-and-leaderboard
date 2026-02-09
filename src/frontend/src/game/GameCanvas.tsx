@@ -10,6 +10,7 @@ interface GameCanvasProps {
   onStreakUpdate: (streak: number) => void;
   onCoinsUpdate: (coins: number) => void;
   onTimeUpdate: (time: number) => void;
+  onMultiplierUpdate: (multiplier: number) => void;
   reducedMotion: boolean;
   soundEnabled: boolean;
 }
@@ -21,6 +22,7 @@ export default function GameCanvas({
   onStreakUpdate,
   onCoinsUpdate,
   onTimeUpdate,
+  onMultiplierUpdate,
   reducedMotion,
   soundEnabled,
 }: GameCanvasProps) {
@@ -32,6 +34,7 @@ export default function GameCanvas({
     onStreakUpdate,
     onCoinsUpdate,
     onTimeUpdate,
+    onMultiplierUpdate,
     reducedMotion,
     soundEnabled,
   });
@@ -46,15 +49,36 @@ export default function GameCanvas({
     if (!ctx) return;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // Use visual viewport dimensions when available for accurate sizing
+      const width = window.visualViewport?.width ?? window.innerWidth;
+      const height = window.visualViewport?.height ?? window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+
+      // Set display size (CSS pixels)
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      // Set actual size in memory (scaled for device pixel ratio)
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      // Scale context to match device pixel ratio
+      ctx.scale(dpr, dpr);
     };
 
     resizeCanvas();
+    
+    // Listen to all relevant resize events
     window.addEventListener('resize', resizeCanvas);
+    window.visualViewport?.addEventListener('resize', resizeCanvas);
+    document.addEventListener('fullscreenchange', resizeCanvas);
+    document.addEventListener('webkitfullscreenchange', resizeCanvas);
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      window.visualViewport?.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('fullscreenchange', resizeCanvas);
+      document.removeEventListener('webkitfullscreenchange', resizeCanvas);
     };
   }, []);
 
@@ -68,7 +92,10 @@ export default function GameCanvas({
     let animationId: number;
 
     const render = () => {
-      renderGame(ctx, canvas.width, canvas.height, gameState, inputState, reducedMotion);
+      // Use display dimensions for rendering (not the scaled buffer size)
+      const width = window.visualViewport?.width ?? window.innerWidth;
+      const height = window.visualViewport?.height ?? window.innerHeight;
+      renderGame(ctx, width, height, gameState, inputState, reducedMotion);
       animationId = requestAnimationFrame(render);
     };
 
@@ -82,8 +109,8 @@ export default function GameCanvas({
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ touchAction: 'none' }}
+      className="absolute inset-0 w-full h-full touch-none"
+      style={{ display: 'block' }}
     />
   );
 }

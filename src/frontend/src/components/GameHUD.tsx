@@ -1,15 +1,16 @@
-import { Pause, Settings, Coins } from 'lucide-react';
+import { Pause, Settings, Coins, Zap } from 'lucide-react';
 
 interface GameHUDProps {
   score: number;
   streak: number;
   coins: number;
   survivalTime: number;
+  multiplier: number;
   onPause: () => void;
   onSettings: () => void;
 }
 
-export default function GameHUD({ score, streak, coins, survivalTime, onPause, onSettings }: GameHUDProps) {
+export default function GameHUD({ score, streak, coins, survivalTime, multiplier, onPause, onSettings }: GameHUDProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -28,6 +29,12 @@ export default function GameHUD({ score, streak, coins, survivalTime, onPause, o
           {streak > 0 && (
             <div className="bg-chart-1/20 backdrop-blur-sm rounded-xl px-4 py-2 border border-chart-1/50">
               <div className="text-sm text-chart-1">Streak: {streak}x</div>
+            </div>
+          )}
+          {multiplier > 1 && (
+            <div className="bg-chart-3/20 backdrop-blur-sm rounded-xl px-4 py-2 border border-chart-3/50 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-chart-3" />
+              <div className="text-sm font-bold text-chart-3">{multiplier.toFixed(1)}x</div>
             </div>
           )}
         </div>

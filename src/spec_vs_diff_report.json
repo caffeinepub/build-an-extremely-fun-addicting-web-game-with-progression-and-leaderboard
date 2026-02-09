@@ -1,117 +1,32 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-09T20:54:43.179Z",
-  "summary": "Diff adds a single-player canvas arcade game loop with difficulty ramp, particles, screen shake, sound effects, settings (sound + reduced motion + key bindings), Internet Identity auth hooks, basic profile setup, and backend score submission + daily/all-time leaderboard queries. However, several requested progression/leaderboard and theming/asset requirements are not evidenced or appear incomplete, and some extra access-control/admin/profile features were added beyond the request.",
+  "generatedAt": "2026-02-09T21:32:52.896Z",
+  "summary": "REQ-1 and REQ-4 appear implemented (title rename in index.html + landing UI; visual viewport/dynamic height + canvas sizing using visualViewport). Multiplier work (REQ-2/REQ-3) appears partially implemented: game state now includes a multiplier and HUD can display it, but HUD only renders the multiplier when > 1, which may fail the AC requiring the current multiplier value to be shown during gameplay (including at base value). Blue-ball(shield) reset behavior is only evidenced via a file-summary statement due to truncation.",
   "missing_requirements": [
     {
-      "id": "REQ-3",
-      "requirement": "Persistent progression with meta-currency plus at least 3 unlockable items (skins/perks) that persist across sessions for the authenticated user; include a “just one more run” mechanic.",
-      "reason": "Backend increments a currency counter on submitScore, but no unlockable items/perks system (>=3 items) or purchase/unlock API/UI is evidenced. The game loop includes coins/shield, but persistence of unlocks and a defined unlock catalog is not shown.",
+      "id": "REQ-2",
+      "requirement": "The HUD shows the current multiplier value (not only the streak label) and it updates live as gameplay events change the multiplier.",
+      "reason": "The HUD multiplier indicator is conditionally rendered only when multiplier > 1, so during normal/base gameplay (multiplier === 1) the current multiplier value is not shown, which may not meet the acceptance criterion of showing the current multiplier value.",
       "evidence": [
-        "backend/main.mo",
-        "frontend/src/game/gameTypes.ts",
-        "frontend/src/game/useGameLoop.ts"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "requirement": "Leaderboard with anti-spam/anti-cheat constraints: rate limits per principal, reasonable score validation, and server-side canonical best score tracking; frontend shows current user’s position/best score when signed in.",
-      "reason": "The backend submitScore shown has no evident rate-limiting/throttling or score validation logic, and does not show canonical best-score enforcement beyond updating pointsHigh in Progression (which is not tied to leaderboard entries in shown code). The frontend leaderboard panel shows entries but no current-user position/best-score display is evidenced.",
-      "evidence": [
-        "backend/main.mo",
-        "frontend/src/api/useLeaderboards.ts",
-        "frontend/src/components/LeaderboardPanel.tsx"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "requirement": "Cohesive distinctive visual theme across UI; must not rely on a blue/purple default theme.",
-      "reason": "Canvas renderer uses a dark-to-blue/purple gradient (#1a1a2e) and blue gridline strokes (rgba(100, 100, 255,...)), which appears to rely on a blue/purple palette (explicitly disallowed).",
-      "evidence": [
-        "frontend/src/game/renderer.ts"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "requirement": "Pause/resume flow that does not break game state.",
-      "reason": "HUD exposes an onPause callback and GameCanvas accepts isPaused, but the diff summary does not show the actual pause/resume state management and UI flow (e.g., pause overlay and resume action) being wired in the page components (GameScreen is referenced but not shown).",
-      "evidence": [
-        "frontend/src/components/GameHUD.tsx",
-        "frontend/src/game/GameCanvas.tsx",
-        "frontend/src/App.tsx"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "requirement": "Generated static art assets (logo, background, icons) stored under frontend/public/assets/generated and used in the UI (logo on landing, background image, icons in HUD/buttons).",
-      "reason": "No generated image assets or usage are evidenced in the shown diff summary. HUD/buttons use lucide-react icons instead of generated icon images, and no references to frontend/public/assets/generated are shown.",
-      "evidence": [
-        "frontend/src/components/GameHUD.tsx",
-        "frontend/src/components/LeaderboardPanel.tsx",
-        "frontend/src/auth/LoginButton.tsx"
+        "frontend/src/components/GameHUD.tsx"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Admin/permissioned access-control initialization via a secret token read from a URL parameter and authorization mixins in the backend.",
-      "reason": "BuildRequest did not ask for an admin token mechanism or URL-secret-based access control initialization; only basic anti-cheat/rate limits were requested.",
-      "evidence": [
-        "backend/main.mo",
-        "frontend/src/hooks/useActor.ts"
-      ]
-    },
-    {
-      "description": "User profile creation flow (name + gamesPlayed) with a mandatory profile-setup dialog after authentication.",
-      "reason": "BuildRequest required Internet Identity association for progression/scores, but did not request an additional user profile system or forced post-login profile setup.",
-      "evidence": [
-        "backend/main.mo",
-        "frontend/src/api/useUserProfile.ts",
-        "frontend/src/auth/ProfileSetupDialog.tsx",
-        "frontend/src/App.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.72,
+  "hallucinated_features": [],
+  "confidence": 0.66,
   "changed_files": [
-    "all_files_summary.json",
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.css",
     "frontend/index.html",
     "frontend/src/App.tsx",
-    "frontend/src/api/useLeaderboards.ts",
-    "frontend/src/api/useUserProfile.ts",
-    "frontend/src/auth/LoginButton.tsx",
-    "frontend/src/auth/ProfileSetupDialog.tsx",
     "frontend/src/components/GameHUD.tsx",
-    "frontend/src/components/LeaderboardPanel.tsx",
-    "frontend/src/components/SettingsDialog.tsx",
     "frontend/src/game/GameCanvas.tsx",
-    "frontend/src/game/audio/sfx.ts",
-    "frontend/src/game/balance/difficulty.ts",
-    "frontend/src/game/fx/particles.ts",
-    "frontend/src/game/fx/screenShake.ts",
     "frontend/src/game/gameTypes.ts",
-    "frontend/src/game/input/usePlayerInput.ts",
-    "frontend/src/game/renderer.ts",
     "frontend/src/game/useGameLoop.ts",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/hooks/useVisualViewport.ts",
     "frontend/src/index.css",
-    "frontend/src/main.tsx",
     "frontend/src/pages/GameScreen.tsx",
     "frontend/src/pages/LandingScreen.tsx",
-    "frontend/src/pages/ResultsScreen.tsx",
-    "frontend/src/progression/UnlocksShop.tsx",
-    "frontend/src/progression/perks.ts",
-    "frontend/src/progression/useProgression.ts",
-    "frontend/src/settings/settingsTypes.ts",
-    "frontend/src/settings/useSettings.ts",
-    "frontend/src/utils/urlParams.ts",
-    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

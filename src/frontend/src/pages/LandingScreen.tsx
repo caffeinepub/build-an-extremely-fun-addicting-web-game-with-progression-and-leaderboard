@@ -32,11 +32,11 @@ export default function LandingScreen({ onStartGame }: LandingScreenProps) {
           <div className="flex items-center gap-2">
             <img 
               src="/assets/generated/game-logo.dim_512x512.png" 
-              alt="Neon Dodge"
+              alt="Neon Doge"
               className="w-12 h-12 object-contain"
             />
             <h1 className="text-2xl font-bold bg-gradient-to-r from-chart-1 to-chart-2 bg-clip-text text-transparent">
-              NEON DODGE
+              NEON DOGE
             </h1>
           </div>
           <div className="flex items-center gap-2">
@@ -56,14 +56,14 @@ export default function LandingScreen({ onStartGame }: LandingScreenProps) {
           <div className="text-center space-y-8 max-w-2xl">
             <img 
               src="/assets/generated/game-logo.dim_512x512.png" 
-              alt="Neon Dodge"
+              alt="Neon Doge"
               className="w-48 h-48 mx-auto object-contain animate-pulse"
             />
             
             <div className="space-y-4">
               <h2 className="text-5xl md:text-7xl font-black tracking-tight">
                 <span className="bg-gradient-to-r from-chart-1 via-chart-2 to-chart-3 bg-clip-text text-transparent">
-                  NEON DODGE
+                  NEON DOGE
                 </span>
               </h2>
               <p className="text-lg md:text-xl text-muted-foreground">

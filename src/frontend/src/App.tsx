@@ -8,6 +8,7 @@ import ResultsScreen from './pages/ResultsScreen';
 import ProfileSetupDialog from './auth/ProfileSetupDialog';
 import { useInternetIdentity } from './hooks/useInternetIdentity';
 import { useGetCallerUserProfile } from './api/useUserProfile';
+import { useVisualViewport } from './hooks/useVisualViewport';
 
 type GameState = 'landing' | 'playing' | 'results';
 
@@ -23,6 +24,9 @@ function AppContent() {
   const [gameResult, setGameResult] = useState<GameResult | null>(null);
   const { identity } = useInternetIdentity();
   const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
+
+  // Initialize visual viewport handling for stable fullscreen sizing
+  useVisualViewport();
 
   const isAuthenticated = !!identity;
   const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;

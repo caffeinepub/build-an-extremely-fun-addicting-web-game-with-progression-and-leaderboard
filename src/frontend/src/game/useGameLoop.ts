@@ -11,6 +11,7 @@ interface UseGameLoopProps {
   onStreakUpdate: (streak: number) => void;
   onCoinsUpdate: (coins: number) => void;
   onTimeUpdate: (time: number) => void;
+  onMultiplierUpdate: (multiplier: number) => void;
   reducedMotion: boolean;
   soundEnabled: boolean;
 }
@@ -22,6 +23,7 @@ export function useGameLoop({
   onStreakUpdate,
   onCoinsUpdate,
   onTimeUpdate,
+  onMultiplierUpdate,
   reducedMotion,
   soundEnabled,
 }: UseGameLoopProps) {
@@ -34,6 +36,7 @@ export function useGameLoop({
     streak: 0,
     coins: 0,
     time: 0,
+    multiplier: 1,
     isGameOver: false,
     shake: 0,
   });
@@ -52,6 +55,7 @@ export function useGameLoop({
       streak: 0,
       coins: 0,
       time: 0,
+      multiplier: 1,
       isGameOver: false,
       shake: 0,
     });
@@ -142,6 +146,7 @@ export function useGameLoop({
         // Check collisions with power-ups
         let newCoins = prev.coins;
         let newStreak = prev.streak;
+        let newMultiplier = prev.multiplier;
         const collectedPowerUps: number[] = [];
         
         updatedPowerUps.forEach((pu, index) => {
@@ -153,7 +158,12 @@ export function useGameLoop({
             if (pu.type === 'coin') {
               newCoins += 1;
               newStreak += 1;
+              newMultiplier = Math.min(newMultiplier + 0.5, 5); // Increase multiplier, cap at 5x
               if (soundEnabled) playSound('coin');
+            } else if (pu.type === 'shield') {
+              // Blue ball resets multiplier
+              newMultiplier = 1;
+              if (soundEnabled) playSound('powerup');
             }
             updatedParticles.push(...createParticleBurst(pu.x, pu.y, pu.type === 'coin' ? '#FFD700' : '#00FFFF'));
           }
@@ -161,8 +171,10 @@ export function useGameLoop({
 
         const finalPowerUps = updatedPowerUps.filter((_, i) => !collectedPowerUps.includes(i));
 
-        // Calculate score
-        const newScore = prev.score + Math.floor(difficulty.scoreMultiplier * 10 * deltaTime * (1 + newStreak * 0.1));
+        // Calculate score using current multiplier
+        const baseScoreGain = difficulty.scoreMultiplier * 10 * deltaTime;
+        const multipliedScore = baseScoreGain * newMultiplier;
+        const newScore = prev.score + Math.floor(multipliedScore);
 
         // Update shake
         const newShake = Math.max(0, prev.shake - deltaTime * 5);
@@ -177,6 +189,7 @@ export function useGameLoop({
             streak: newStreak,
             coins: newCoins,
             time: newTime,
+            multiplier: newMultiplier,
           };
         }
 
@@ -184,6 +197,7 @@ export function useGameLoop({
         onStreakUpdate(newStreak);
         onCoinsUpdate(newCoins);
         onTimeUpdate(newTime);
+        onMultiplierUpdate(newMultiplier);
 
         return {
           ...prev,
@@ -194,6 +208,7 @@ export function useGameLoop({
           streak: newStreak,
           coins: newCoins,
           time: newTime,
+          multiplier: newMultiplier,
           shake: newShake,
         };
       });
@@ -206,7 +221,7 @@ export function useGameLoop({
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [isPaused, gameState.isGameOver, onGameOver, onScoreUpdate, onStreakUpdate, onCoinsUpdate, onTimeUpdate, soundEnabled]);
+  }, [isPaused, gameState.isGameOver, onGameOver, onScoreUpdate, onStreakUpdate, onCoinsUpdate, onTimeUpdate, onMultiplierUpdate, soundEnabled]);
 
   return { gameState, resetGame };
 }

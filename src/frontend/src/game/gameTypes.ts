@@ -40,6 +40,7 @@ export interface GameState {
   streak: number;
   coins: number;
   time: number;
+  multiplier: number;
   isGameOver: boolean;
   shake: number;
 }

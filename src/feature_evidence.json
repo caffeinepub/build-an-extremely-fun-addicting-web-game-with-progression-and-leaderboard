@@ -2,14 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-a-complete-playable-arcade-style-game-single-player-that-is-immediately-fun-easy-to-learn-and-hard-to-master-with-a-core-loop-designed-for-repeated-short-runs-e-g-30-120-seconds-and-a-clear-fail-state-instant-restart",
-      "featureTitle": "Create a complete, playable, arcade-style game (single-player) that is immediately fun, easy to learn, and hard to master, with a core loop designed for repeated short runs (e.g., 30–120 seconds) and a clear fail state + instant restart.",
+      "featureId": "feature-change-the-app-game-title-text-to-neon-doge-everywhere-it-is-user-visible-including-the-browser-tab-title-and-the-landing-screen-header-hero-text",
+      "featureTitle": "Change the app/game title text to \"Neon Doge\" everywhere it is user-visible, including the browser tab title and the landing screen header/hero text.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/GameHUD.tsx",
-        "frontend/src/game/GameCanvas.tsx",
-        "frontend/src/game/gameTypes.ts",
-        "frontend/src/game/useGameLoop.ts"
+        "frontend/index.html",
+        "frontend/src/pages/LandingScreen.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -25,15 +22,14 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-a-polished-game-feel-layer-responsive-controls-keyboard-pointer-touch-hit-feedback-screen-shake-juice-subtle-particle-visual-effects-and-a-difficulty-curve-that-ramps-over-time-to-sustain-challenge",
-      "featureTitle": "Implement a polished game feel layer: responsive controls (keyboard + pointer/touch), hit feedback, screen shake/juice (subtle), particle/visual effects, and a difficulty curve that ramps over time to sustain challenge.",
+      "featureId": "feature-fix-the-in-game-multiplier-so-that-it-reliably-affects-scoring-during-gameplay-and-is-reflected-in-the-hud-as-the-current-multiplier-value",
+      "featureTitle": "Fix the in-game multiplier so that it reliably affects scoring during gameplay and is reflected in the HUD as the current multiplier value.",
       "files": [
+        "frontend/src/components/GameHUD.tsx",
         "frontend/src/game/GameCanvas.tsx",
-        "frontend/src/game/audio/sfx.ts",
-        "frontend/src/game/balance/difficulty.ts",
-        "frontend/src/game/fx/particles.ts",
-        "frontend/src/game/fx/screenShake.ts",
-        "frontend/src/game/input/usePlayerInput.ts"
+        "frontend/src/game/gameTypes.ts",
+        "frontend/src/game/useGameLoop.ts",
+        "frontend/src/pages/GameScreen.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -49,13 +45,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-progression-and-retention-hooks-that-do-not-require-external-services-persistent-unlocks-skins-perks-earned-via-play-a-simple-meta-currency-and-at-least-one-just-one-more-run-mechanic-e-g-near-miss-bonus-streak-multiplier-or-risk-reward-pickups",
-      "featureTitle": "Add progression and retention hooks that do not require external services: persistent unlocks/skins/perks earned via play, a simple meta-currency, and at least one “just one more run” mechanic (e.g., near-miss bonus, streak multiplier, or risk/reward pickups).",
+      "featureId": "feature-when-the-player-collides-with-a-blue-ball-power-up-reset-the-multiplier-back-to-its-base-value-immediately",
+      "featureTitle": "When the player collides with a blue ball power-up, reset the multiplier back to its base value immediately.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/progression/UnlocksShop.tsx",
-        "frontend/src/progression/perks.ts",
-        "frontend/src/progression/useProgression.ts"
+        "frontend/src/game/useGameLoop.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -71,13 +64,14 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-integrate-internet-identity-sign-in-and-use-it-to-associate-saved-progression-and-scores-with-the-user-allow-unauthenticated-play-but-clearly-prompt-sign-in-to-save-progress-submit-scores",
-      "featureTitle": "Integrate Internet Identity sign-in and use it to associate saved progression and scores with the user; allow unauthenticated play but clearly prompt sign-in to save progress/submit scores.",
+      "featureId": "feature-fix-fullscreen-responsive-layout-so-that-vertical-screen-space-is-not-compressed-in-fullscreen-mode-and-the-gameplay-view-maintains-consistent-vertical-sizing-across-view-widths-mobile-desktop",
+      "featureTitle": "Fix fullscreen/responsive layout so that vertical screen space is not compressed in fullscreen mode, and the gameplay view maintains consistent vertical sizing across view widths (mobile/desktop).",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/api/useUserProfile.ts",
-        "frontend/src/auth/LoginButton.tsx",
-        "frontend/src/auth/ProfileSetupDialog.tsx"
+        "frontend/src/game/GameCanvas.tsx",
+        "frontend/src/hooks/useVisualViewport.ts",
+        "frontend/src/index.css",
+        "frontend/src/pages/GameScreen.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -89,73 +83,6 @@
       ],
       "testIds": [
         "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-create-a-cohesive-distinctive-visual-theme-for-the-entire-game-ui-colors-typography-layout-and-motion-language-and-apply-it-consistently-across-menus-hud-results-screen-and-leaderboard-do-not-use-a-blue-purple-default-theme",
-      "featureTitle": "Create a cohesive, distinctive visual theme for the entire game UI (colors, typography, layout, and motion language) and apply it consistently across menus, HUD, results screen, and leaderboard. Do not use a blue/purple default theme.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/api/useLeaderboards.ts",
-        "frontend/src/components/LeaderboardPanel.tsx",
-        "frontend/src/index.css"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-player-facing-settings-and-accessibility-basics-volume-toggle-reduced-motion-toggle-control-remapping-at-least-for-primary-actions-on-keyboard-and-a-pause-resume-flow",
-      "featureTitle": "Add player-facing settings and accessibility basics: volume toggle, reduced motion toggle, control remapping (at least for primary actions on keyboard), and a pause/resume flow.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/SettingsDialog.tsx",
-        "frontend/src/game/GameCanvas.tsx",
-        "frontend/src/game/input/usePlayerInput.ts",
-        "frontend/src/settings/settingsTypes.ts",
-        "frontend/src/settings/useSettings.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-7"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-generated-static-art-assets-for-the-game-logo-background-scene-art-and-a-small-set-of-icons-and-render-them-in-the-ui-from-frontend-static-files-do-not-serve-images-through-the-backend",
-      "featureTitle": "Add generated static art assets for the game (logo, background/scene art, and a small set of icons) and render them in the UI from frontend static files (do not serve images through the backend).",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/GameHUD.tsx",
-        "frontend/src/components/LeaderboardPanel.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-8"
       ],
       "confidence": "high"
     }

@@ -1,188 +1,92 @@
 {
   "kind": "build_request",
-  "title": "Build an extremely fun, addicting web game with progression and leaderboard",
+  "title": "Rename to Neon Doge, fix multiplier + blue ball reset, and correct fullscreen height compression",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Create a complete, playable, arcade-style game (single-player) that is immediately fun, easy to learn, and hard to master, with a core loop designed for repeated short runs (e.g., 30–120 seconds) and a clear fail state + instant restart.",
+      "text": "Change the app/game title text to \"Neon Doge\" everywhere it is user-visible, including the browser tab title and the landing screen header/hero text.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "recent-messages-8"
         ],
         "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+          "1)  change the title to Neon Doge"
         ]
       },
       "acceptanceCriteria": [
-        "Game loads into a playable state without requiring setup from the user",
-        "A run can be started within 1 click/tap from the landing screen",
-        "A run ends with an unambiguous fail state and shows a results screen (score + best score)",
-        "Restarting a run takes at most 1 interaction and does not require a full page reload"
+        "The HTML document <title> in frontend/index.html is \"Neon Doge\".",
+        "The landing screen title text currently shown as \"NEON DODGE\" is updated to \"NEON DOGE\" (and any related alt text using \"Neon Dodge\" is updated to \"Neon Doge\").",
+        "No remaining user-facing occurrences of the old title spelling (\"Neon Dodge\") remain in the UI."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Implement a polished game feel layer: responsive controls (keyboard + pointer/touch), hit feedback, screen shake/juice (subtle), particle/visual effects, and a difficulty curve that ramps over time to sustain challenge.",
+      "text": "Fix the in-game multiplier so that it reliably affects scoring during gameplay and is reflected in the HUD as the current multiplier value.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "recent-messages-8"
         ],
         "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+          "2) the multiplier isnt working"
         ]
       },
       "acceptanceCriteria": [
-        "Keyboard controls work on desktop and touch/pointer controls work on mobile",
-        "The difficulty increases during a run (e.g., speed/spawn rate/complexity) and is noticeable by 30 seconds",
-        "Collisions/damage/fail events provide clear feedback (visual + optional sound)",
-        "The game remains performant (stable frame rate) on a typical laptop browser"
+        "During an active run, the score increases in a way that changes when the multiplier changes (i.e., the multiplier has a measurable effect on points gained over time).",
+        "The HUD shows the current multiplier value (not only the streak label) and it updates live as gameplay events change the multiplier.",
+        "The multiplier logic is driven by game state (not hardcoded in the renderer) and remains consistent after pausing/resuming."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Add progression and retention hooks that do not require external services: persistent unlocks/skins/perks earned via play, a simple meta-currency, and at least one “just one more run” mechanic (e.g., near-miss bonus, streak multiplier, or risk/reward pickups).",
-      "target": "both",
+      "text": "When the player collides with a blue ball power-up, reset the multiplier back to its base value immediately.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "recent-messages-8"
         ],
         "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+          "3) when touching a blue ball, the multiplier should be reset"
         ]
       },
       "acceptanceCriteria": [
-        "Players earn a currency or progression points during/after runs",
-        "At least 3 unlockable items (e.g., cosmetics or minor gameplay perks) are available",
-        "Unlock/progression state persists across sessions for the same authenticated user",
-        "Progression cannot be trivially lost on refresh (after successful save)"
+        "Collecting a coin-type power-up increases the multiplier as intended by the game design.",
+        "Collecting the blue ball power-up (currently rendered as the shield-colored power-up) resets the multiplier to its base value in the same frame/tick the collision is processed.",
+        "After collecting a blue ball, subsequent scoring uses the reset multiplier until increased again by the relevant mechanic."
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Integrate Internet Identity sign-in and use it to associate saved progression and scores with the user; allow unauthenticated play but clearly prompt sign-in to save progress/submit scores.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
-        ]
-      },
-      "acceptanceCriteria": [
-        "User can play without signing in",
-        "When signed in, the app shows the user is authenticated and enables saving/submitting",
-        "When not signed in, the UI communicates that progress/leaderboard submission requires sign-in"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Implement a backend-backed global leaderboard (e.g., daily and all-time) with basic anti-spam/anti-cheat constraints appropriate for a casual game (e.g., rate limits per principal, reasonable score validation, and server-side canonical best score tracking).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes methods to submit a run result and to fetch leaderboard entries",
-        "Leaderboard supports at least: all-time top N and a time-bounded board (e.g., daily)",
-        "Backend stores a user’s best score and does not allow unlimited rapid submissions (basic throttling)",
-        "Frontend displays leaderboards with the current user’s position/best score when signed in"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Create a cohesive, distinctive visual theme for the entire game UI (colors, typography, layout, and motion language) and apply it consistently across menus, HUD, results screen, and leaderboard. Do not use a blue/purple default theme.",
+      "text": "Fix fullscreen/responsive layout so that vertical screen space is not compressed in fullscreen mode, and the gameplay view maintains consistent vertical sizing across view widths (mobile/desktop).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "recent-messages-8"
         ],
         "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+          "4) When viewing full screen the vertical screen space becomes compressed, fix this. In all view wids the vertical space should be consistent"
         ]
       },
       "acceptanceCriteria": [
-        "A single, coherent theme is evident across all screens (HUD, menus, modals, leaderboard)",
-        "Theme includes a defined palette, typography choices, and consistent component styling",
-        "No default-looking unthemed UI remains (e.g., plain browser buttons)",
-        "The chosen theme does not rely on a blue/purple primary palette"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Add player-facing settings and accessibility basics: volume toggle, reduced motion toggle, control remapping (at least for primary actions on keyboard), and a pause/resume flow.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Player can pause and resume a run without breaking game state",
-        "Sound can be muted/unmuted and the choice persists locally",
-        "A reduced-motion option disables or significantly reduces screen shake and intense motion effects",
-        "Primary keyboard action(s) can be remapped in settings"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Add generated static art assets for the game (logo, background/scene art, and a small set of icons) and render them in the UI from frontend static files (do not serve images through the backend).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Generated images are stored under frontend/public/assets/generated",
-        "The app uses the generated logo on the title/landing screen",
-        "At least one generated background/scene image is used in the UI (e.g., landing/results)",
-        "Icons are used in HUD/buttons (e.g., sound, pause, currency)"
+        "Entering fullscreen does not change the gameplay view into a vertically compressed layout (canvas fills the intended viewport height).",
+        "On mobile browsers with dynamic address bars, the gameplay view height remains stable (uses a dynamic viewport height strategy rather than only 100vh).",
+        "The canvas resize logic uses the actual visual viewport size when available so rendering matches the displayed canvas size.",
+        "HUD overlays remain correctly positioned at the top and bottom edges after resizing/fullscreen changes."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor (all logic in the main actor file)",
-    "Do not edit files under frontend/src/components/ui (compose them instead)",
-    "Do not edit immutable hook/bootstrap paths listed in SYSTEM_CONTEXT; integrate via new components/pages/hooks where needed",
-    "No external databases or third-party auth providers; Internet Identity only"
+    "Frontend files in immutablePaths must not be edited (compose/read-only components only)."
   ],
   "nonGoals": [
-    "Multiplayer or real-time gameplay",
-    "WebSocket-based features (chat/live updates)",
-    "External analytics, ads, push notifications, or email integrations",
-    "Payments or in-app purchases"
+    "Adding new power-up types beyond the existing ones (coin/shield).",
+    "Changing backend score submission/leaderboard logic.",
+    "Introducing new authentication or persistence features."
   ],
   "imageRequirements": {
-    "required": [
-      "Arcade game logo with bold, playful typography and simple emblem (game-logo.dim_512x512.png)",
-      "High-energy illustrated background with dynamic shapes and motion lines (menu-background.dim_1920x1080.png)",
-      "Set of minimal, high-contrast UI icons (pause, play, sound on/off, trophy, coin) as a cohesive set (ui-icons-sheet.dim_1024x1024.png)"
-    ],
+    "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

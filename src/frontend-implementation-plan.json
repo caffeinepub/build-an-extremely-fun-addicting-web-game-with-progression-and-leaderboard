@@ -1,298 +1,115 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Arcade micro-run 2D web game with progression, II sign-in, settings, and themed UI",
+  "title": "Neon Doge title update, multiplier fixes, and fullscreen viewport sizing",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Implement a complete, playable single-player 2D arcade game with short runs, clear fail state, results, and instant restart.",
+      "summary": "Rename the game to \"Neon Doge\" across the browser tab title and all user-visible landing UI text/alt text.",
       "acceptanceCriteria": [
-        "Game loads into a playable state without requiring setup from the user",
-        "A run can be started within 1 click/tap from the landing screen",
-        "A run ends with an unambiguous fail state and shows a results screen (score + best score)",
-        "Restarting a run takes at most 1 interaction and does not require a full page reload"
+        "The HTML document <title> in frontend/index.html is \"Neon Doge\".",
+        "The landing screen title text currently shown as \"NEON DODGE\" is updated to \"NEON DOGE\" (and any related alt text using \"Neon Dodge\" is updated to \"Neon Doge\").",
+        "No remaining user-facing occurrences of the old title spelling (\"Neon Dodge\") remain in the UI."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
-          "operation": "create",
-          "description": "Create the core app shell that boots into a landing screen and a 2D game run loop with a simple state machine (Landing → Playing → Results), including 1-interaction start and restart wiring."
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Update the document <title> text to \"Neon Doge\"."
         },
         {
-          "path": "frontend/src/game/GameCanvas.tsx",
-          "operation": "create",
-          "description": "Create the primary 2D game renderer/controller (canvas-based) that runs a 30–120s arcade loop, tracks score, and emits a definitive fail event that transitions to Results."
-        },
-        {
-          "path": "frontend/src/game/gameTypes.ts",
-          "operation": "create",
-          "description": "Define shared types for run state, input actions, scoring, and events used by the game loop and UI."
-        },
-        {
-          "path": "frontend/src/game/useGameLoop.ts",
-          "operation": "create",
-          "description": "Implement a requestAnimationFrame-driven loop (time step, spawn/update/collide, score progression) designed for short, repeatable runs without page reload."
-        },
-        {
-          "path": "frontend/src/components/GameHUD.tsx",
-          "operation": "create",
-          "description": "Create an in-run HUD showing score, multiplier/streak indicator, currency earned this run, and buttons for pause/settings."
-        },
-        {
-          "path": "frontend/src/components/ResultsModal.tsx",
-          "operation": "create",
-          "description": "Create a results screen/modal that shows run score and best score, plus a prominent Restart action (single interaction) and optional Save/Submit prompts when authenticated."
+          "path": "frontend/src/pages/LandingScreen.tsx",
+          "operation": "modify",
+          "description": "Update landing header/hero title text from \"NEON DODGE\" to \"NEON DOGE\" and update logo alt text from \"Neon Dodge\" to \"Neon Doge\"."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Add polished game feel: responsive keyboard + pointer/touch controls, feedback/juice (shake, particles), and a noticeable difficulty ramp while keeping performance stable.",
+      "summary": "Make multiplier a first-class part of game state that affects scoring and is displayed live in the HUD (and remains consistent through pause/resume).",
       "acceptanceCriteria": [
-        "Keyboard controls work on desktop and touch/pointer controls work on mobile",
-        "The difficulty increases during a run (e.g., speed/spawn rate/complexity) and is noticeable by 30 seconds",
-        "Collisions/damage/fail events provide clear feedback (visual + optional sound)",
-        "The game remains performant (stable frame rate) on a typical laptop browser"
+        "During an active run, the score increases in a way that changes when the multiplier changes (i.e., the multiplier has a measurable effect on points gained over time).",
+        "The HUD shows the current multiplier value (not only the streak label) and it updates live as gameplay events change the multiplier.",
+        "The multiplier logic is driven by game state (not hardcoded in the renderer) and remains consistent after pausing/resuming."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/game/input/usePlayerInput.ts",
-          "operation": "create",
-          "description": "Implement unified input handling for keyboard and pointer/touch (tap/drag) mapped into game actions (move/primary action), with low-latency updates suitable for arcade feel."
+          "path": "frontend/src/game/gameTypes.ts",
+          "operation": "modify",
+          "description": "Extend the GameState type to include a numeric multiplier value (stored in state, not derived only in rendering)."
         },
         {
-          "path": "frontend/src/game/fx/particles.ts",
-          "operation": "create",
-          "description": "Add lightweight particle/visual burst helpers for hits, pickups, and fail events, tuned for performance."
+          "path": "frontend/src/game/useGameLoop.ts",
+          "operation": "modify",
+          "description": "Introduce and maintain a multiplier field in the game loop state; ensure scoring calculations use the current state multiplier and that multiplier updates are applied within the same tick as gameplay events. Keep multiplier stable across pause/resume by relying on stored gameState rather than recomputation."
         },
         {
-          "path": "frontend/src/game/fx/screenShake.ts",
-          "operation": "create",
-          "description": "Add subtle screen shake and hit-stop style feedback hooks that can be reduced/disabled by the reduced-motion setting."
-        },
-        {
-          "path": "frontend/src/game/balance/difficulty.ts",
-          "operation": "create",
-          "description": "Implement a time-based difficulty curve (e.g., spawn rate/speed/complexity ramp) that becomes clearly harder by ~30 seconds and continues scaling during the run."
+          "path": "frontend/src/pages/GameScreen.tsx",
+          "operation": "modify",
+          "description": "Track current multiplier in the screen-level state (similar to score/streak/coins) and pass it to the HUD; wire a new onMultiplierUpdate callback from GameCanvas/useGameLoop into GameScreen state."
         },
         {
           "path": "frontend/src/game/GameCanvas.tsx",
           "operation": "modify",
-          "description": "Wire responsive input, hit feedback (particles + shake), and difficulty ramp into gameplay; ensure collisions/fail states trigger clear feedback while maintaining stable frame rate."
+          "description": "Add a new onMultiplierUpdate prop and forward it into useGameLoop so multiplier changes propagate to the HUD in real time."
         },
         {
-          "path": "frontend/src/game/audio/sfx.ts",
-          "operation": "create",
-          "description": "Add optional simple WebAudio-based SFX helpers (hit/pickup/fail) with a global mute toggle integration."
+          "path": "frontend/src/components/GameHUD.tsx",
+          "operation": "modify",
+          "description": "Add a multiplier display in the HUD that shows the current multiplier value (separate from the streak label) and updates live based on props."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Add persistent progression hooks: meta-currency, at least 3 unlockable skins/perks, and a “just one more run” mechanic; persist progression for authenticated users.",
+      "summary": "Reset multiplier to its base value immediately upon collecting the blue ball (currently the shield-colored power-up), while coin power-ups increase multiplier as intended.",
       "acceptanceCriteria": [
-        "Players earn a currency or progression points during/after runs",
-        "At least 3 unlockable items (e.g., cosmetics or minor gameplay perks) are available",
-        "Unlock/progression state persists across sessions for the same authenticated user",
-        "Progression cannot be trivially lost on refresh (after successful save)"
+        "Collecting a coin-type power-up increases the multiplier as intended by the game design.",
+        "Collecting the blue ball power-up (currently rendered as the shield-colored power-up) resets the multiplier to its base value in the same frame/tick the collision is processed.",
+        "After collecting a blue ball, subsequent scoring uses the reset multiplier until increased again by the relevant mechanic."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/progression/perks.ts",
-          "operation": "create",
-          "description": "Define at least 3 unlockable items (cosmetic skins and/or minor gameplay perks) and their effects, costs, and UI labels."
-        },
-        {
-          "path": "frontend/src/progression/useProgression.ts",
-          "operation": "create",
-          "description": "Implement progression state management including meta-currency earned per run, unlock purchases, and persistence. Use backend-stored user profile fields for authenticated persistence (e.g., store meta-currency in the existing UserProfile numeric field) and localStorage fallback for guests. Verify the component's usage instructions before implementing. (authorization component: authenticated profile persistence guidance)"
-        },
-        {
-          "path": "frontend/src/progression/UnlocksShop.tsx",
-          "operation": "create",
-          "description": "Create an in-app unlocks screen/panel to spend currency on perks/skins and preview equipped selection; ensure it is reachable from Landing/Results without adding new top-level routes."
-        },
-        {
-          "path": "frontend/src/game/mechanics/justOneMore.ts",
-          "operation": "create",
-          "description": "Implement a “just one more run” mechanic such as a streak multiplier + near-miss bonus and/or risk/reward pickups that meaningfully increase score/currency when playing aggressively."
-        },
-        {
-          "path": "frontend/src/components/ResultsModal.tsx",
+          "path": "frontend/src/game/useGameLoop.ts",
           "operation": "modify",
-          "description": "Award currency/progression on run end, show earned currency and streak/near-miss bonuses, and present a clear next action (Restart) alongside optional unlock prompts."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wire the UnlocksShop/progression panel into the existing Landing/Results flow so unlocks are discoverable and progression loops back into another run quickly."
+          "description": "Update power-up collision handling so that coin power-ups increase the multiplier and shield/blue-ball power-ups reset multiplier to base immediately within the collision processing tick; ensure the scoring calculation after collision uses the updated multiplier for that tick."
         }
       ]
     },
     {
       "id": "REQ-4",
-      "summary": "Integrate Internet Identity sign-in for associating saved progression and scores; allow unauthenticated play but prompt sign-in for saving/submitting.",
+      "summary": "Fix fullscreen and responsive sizing so the gameplay view uses stable visual viewport height (no vertical compression) and the canvas resize logic matches the actual displayed size, keeping HUD overlays correctly positioned.",
       "acceptanceCriteria": [
-        "User can play without signing in",
-        "When signed in, the app shows the user is authenticated and enables saving/submitting",
-        "When not signed in, the UI communicates that progress/leaderboard submission requires sign-in"
+        "Entering fullscreen does not change the gameplay view into a vertically compressed layout (canvas fills the intended viewport height).",
+        "On mobile browsers with dynamic address bars, the gameplay view height remains stable (uses a dynamic viewport height strategy rather than only 100vh).",
+        "The canvas resize logic uses the actual visual viewport size when available so rendering matches the displayed canvas size.",
+        "HUD overlays remain correctly positioned at the top and bottom edges after resizing/fullscreen changes."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/auth/LoginButton.tsx",
+          "path": "frontend/src/hooks/useVisualViewport.ts",
           "operation": "create",
-          "description": "Add a login/logout button using the existing Internet Identity hook. Use the authorization component guidance for clearing cached data on logout (e.g., react-query cache). Verify the component's usage instructions before implementing. (authorization component: login button and cache-clear patterns)"
-        },
-        {
-          "path": "frontend/src/auth/ProfileSetupDialog.tsx",
-          "operation": "create",
-          "description": "Prompt for a display name the first time a principal logs in (when getCallerUserProfile returns null) and save it via the backend profile save function. Verify the component's usage instructions before implementing. (authorization component: profile setup flow and modal flash prevention guidance)"
-        },
-        {
-          "path": "frontend/src/auth/useAuthUIState.ts",
-          "operation": "create",
-          "description": "Create a small helper hook to derive isAuthenticated and to coordinate actor/profile query readiness to avoid profile setup modal flashing. Verify the component's usage instructions before implementing. (authorization component: actor dependency + profile query enabling guidance)"
-        },
-        {
-          "path": "frontend/src/api/useBackend.ts",
-          "operation": "create",
-          "description": "Create a thin wrapper around useActor() to expose typed backend calls to UI/game code while keeping unauthenticated play enabled (anonymous actor allowed for read-only calls)."
-        },
-        {
-          "path": "frontend/src/api/useUserProfile.ts",
-          "operation": "create",
-          "description": "Add react-query hooks for fetching/saving the caller user profile and showing authenticated identity status in UI. Verify the component's usage instructions before implementing. (authorization component: getCallerUserProfile/saveCallerUserProfile patterns)"
+          "description": "Create a small hook that derives stable viewport dimensions using window.visualViewport when available, and updates a CSS variable (for app height) on resize/orientation/fullscreen changes."
         },
         {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Wire LoginButton and ProfileSetupDialog into the landing/menu UI. Ensure gameplay is accessible without login, but clearly message that saving progression and submitting scores require sign-in."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Create and apply a cohesive distinctive visual theme across all screens (menus, HUD, results, leaderboard) with consistent motion language; avoid blue/purple primary styling.",
-      "acceptanceCriteria": [
-        "A single, coherent theme is evident across all screens (HUD, menus, modals, leaderboard)",
-        "Theme includes a defined palette, typography choices, and consistent component styling",
-        "No default-looking unthemed UI remains (e.g., plain browser buttons)",
-        "The chosen theme does not rely on a blue/purple primary palette"
-      ],
-      "file_operations": [
+          "description": "Wire the visual viewport sizing hook so the CSS viewport-height variable is initialized and kept up to date for the entire app (including fullscreen transitions)."
+        },
         {
           "path": "frontend/src/index.css",
-          "operation": "create",
-          "description": "Define the global theme tokens (CSS variables used by Tailwind/shadcn), typography, background styling, and motion defaults using a non-blue/purple primary palette (e.g., warm oranges/greens/ink neutrals)."
-        },
-        {
-          "path": "frontend/src/components/LayoutFrame.tsx",
-          "operation": "create",
-          "description": "Create a cohesive layout wrapper for landing/menu, in-game HUD overlay, results, and leaderboard, applying consistent spacing, panels, and motion language."
-        },
-        {
-          "path": "frontend/src/components/LeaderboardPanel.tsx",
-          "operation": "create",
-          "description": "Create a themed leaderboard panel (daily + all-time tabs) that visually matches the rest of the UI and can show the signed-in user’s best/position when available."
-        },
-        {
-          "path": "frontend/src/api/useLeaderboards.ts",
-          "operation": "create",
-          "description": "Add react-query hooks to fetch daily and all-time leaderboards and expose loading/error states for the leaderboard UI."
-        },
-        {
-          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Apply LayoutFrame across Landing/Playing/Results and wire a leaderboard entry point (button/panel) so the theme is consistently visible across all required screens."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Add settings and accessibility basics: volume toggle, reduced motion, keyboard control remapping for primary actions, and pause/resume flow.",
-      "acceptanceCriteria": [
-        "Player can pause and resume a run without breaking game state",
-        "Sound can be muted/unmuted and the choice persists locally",
-        "A reduced-motion option disables or significantly reduces screen shake and intense motion effects",
-        "Primary keyboard action(s) can be remapped in settings"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/settings/settingsTypes.ts",
-          "operation": "create",
-          "description": "Define settings model for volume mute, reduced motion, and keyboard bindings for primary actions."
+          "description": "Add a dynamic viewport height strategy via a CSS variable (e.g., --app-height) and ensure root/body containers can size to it so fullscreen/mobile address-bar changes don't compress the gameplay view."
         },
         {
-          "path": "frontend/src/settings/useSettings.ts",
-          "operation": "create",
-          "description": "Implement settings persistence to localStorage, including reduced-motion and volume preferences, plus keyboard remapping state."
-        },
-        {
-          "path": "frontend/src/components/SettingsDialog.tsx",
-          "operation": "create",
-          "description": "Create a settings dialog/panel (compose shadcn-ui components; do not edit frontend/src/components/ui) that supports volume toggle, reduced motion toggle, and primary key remapping UI. Verify the component's usage instructions before implementing. (shadcn-ui component library: compose existing UI primitives)"
-        },
-        {
-          "path": "frontend/src/game/input/usePlayerInput.ts",
+          "path": "frontend/src/pages/GameScreen.tsx",
           "operation": "modify",
-          "description": "Integrate remappable keyboard bindings (for at least the primary action) and ensure pointer/touch controls remain available on mobile."
+          "description": "Replace fixed h-screen usage with sizing that respects the dynamic app height variable (and keep the container relative) so HUD overlays remain pinned to the top/bottom edges after resizes/fullscreen changes."
         },
         {
           "path": "frontend/src/game/GameCanvas.tsx",
           "operation": "modify",
-          "description": "Add pause/resume support that freezes the simulation without losing state; integrate reduced-motion setting to disable/reduce shake/intense motion; integrate volume setting into SFX playback."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wire SettingsDialog into HUD and landing/results, and expose Pause/Resume controls during a run."
-        }
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "summary": "Add generated static art assets (logo, background, icons) under frontend public assets and render them in UI (no backend image serving).",
-      "acceptanceCriteria": [
-        "Generated images are stored under frontend/public/assets/generated",
-        "The app uses the generated logo on the title/landing screen",
-        "At least one generated background/scene image is used in the UI (e.g., landing/results)",
-        "Icons are used in HUD/buttons (e.g., sound, pause, currency)"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/game-logo.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the generated arcade game logo asset to the required static path."
-        },
-        {
-          "path": "frontend/public/assets/generated/menu-background.dim_1920x1080.png",
-          "operation": "create",
-          "description": "Add the generated high-energy menu background asset to the required static path."
-        },
-        {
-          "path": "frontend/public/assets/generated/ui-icons-sheet.dim_1024x1024.png",
-          "operation": "create",
-          "description": "Add the generated cohesive UI icon sheet (pause/play/sound/trophy/coin) to the required static path."
-        },
-        {
-          "path": "frontend/src/components/GeneratedArt.tsx",
-          "operation": "create",
-          "description": "Create a small helper component to render the generated logo/background/icons from frontend/public/assets/generated (static assets only), including icon cropping/mapping as needed."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Render the generated logo on the landing screen via frontend/public/assets/generated/game-logo.dim_512x512.png and apply the generated background via frontend/public/assets/generated/menu-background.dim_1920x1080.png."
-        },
-        {
-          "path": "frontend/src/components/GameHUD.tsx",
-          "operation": "modify",
-          "description": "Use icons from frontend/public/assets/generated/ui-icons-sheet.dim_1024x1024.png for HUD/buttons (sound, pause, currency) and ensure they match the global theme."
-        },
-        {
-          "path": "frontend/src/components/LeaderboardPanel.tsx",
-          "operation": "modify",
-          "description": "Use the trophy icon from frontend/public/assets/generated/ui-icons-sheet.dim_1024x1024.png within the leaderboard UI for visual consistency."
+          "description": "Update canvas resizing to prefer visual viewport dimensions when available and to keep canvas drawing buffer in sync with its displayed size (including handling devicePixelRatio for crisp rendering); ensure resize runs on visualViewport resize/fullscreen changes, not only window resize."
         }
       ]
     }
