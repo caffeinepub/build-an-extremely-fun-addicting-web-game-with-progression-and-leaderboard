@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useGameLoop } from './useGameLoop';
 import { usePlayerInput } from './input/usePlayerInput';
 import { renderGame } from './renderer';
-import { loadRendererAssets } from './rendererAssets';
 
 interface GameCanvasProps {
   isPaused: boolean;
@@ -26,8 +25,6 @@ export default function GameCanvas({
   soundEnabled,
 }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [assetsLoaded, setAssetsLoaded] = useState(false);
-  
   const { gameState, resetGame } = useGameLoop({
     isPaused,
     onGameOver,
@@ -41,14 +38,6 @@ export default function GameCanvas({
 
   const { inputState } = usePlayerInput(canvasRef, !isPaused);
 
-  // Preload game assets
-  useEffect(() => {
-    loadRendererAssets().then(() => {
-      setAssetsLoaded(true);
-    });
-  }, []);
-
-  // Setup high-DPI canvas rendering
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -57,19 +46,8 @@ export default function GameCanvas({
     if (!ctx) return;
 
     const resizeCanvas = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      
-      // Set display size (CSS pixels)
-      canvas.style.width = `${rect.width}px`;
-      canvas.style.height = `${rect.height}px`;
-      
-      // Set actual size in memory (scaled for retina)
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      
-      // Scale context to match DPI
-      ctx.scale(dpr, dpr);
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
     resizeCanvas();
@@ -88,14 +66,9 @@ export default function GameCanvas({
     if (!ctx) return;
 
     let animationId: number;
-    const dpr = window.devicePixelRatio || 1;
 
     const render = () => {
-      // Use logical dimensions for rendering
-      const logicalWidth = canvas.width / dpr;
-      const logicalHeight = canvas.height / dpr;
-      
-      renderGame(ctx, logicalWidth, logicalHeight, gameState, inputState, reducedMotion);
+      renderGame(ctx, canvas.width, canvas.height, gameState, inputState, reducedMotion);
       animationId = requestAnimationFrame(render);
     };
 
@@ -110,10 +83,7 @@ export default function GameCanvas({
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
-      style={{ 
-        touchAction: 'none',
-        imageRendering: 'auto',
-      }}
+      style={{ touchAction: 'none' }}
     />
   );
 }

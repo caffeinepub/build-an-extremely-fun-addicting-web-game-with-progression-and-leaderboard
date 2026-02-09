@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Play } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Pause, Play } from 'lucide-react';
 import GameCanvas from '../game/GameCanvas';
 import GameHUD from '../components/GameHUD';
 import SettingsDialog from '../components/SettingsDialog';
@@ -65,20 +65,20 @@ export default function GameScreen({ onGameOver }: GameScreenProps) {
       />
 
       {isPaused && !showSettings && (
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-md flex items-center justify-center z-50">
-          <div className="text-center space-y-6 bg-card/80 backdrop-blur-xl rounded-3xl p-12 border border-border shadow-2xl">
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="text-center space-y-6">
             <h2 className="text-4xl font-bold">PAUSED</h2>
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleResume}
-                className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-chart-1 hover:bg-chart-1/80 hover:scale-105 text-primary-foreground font-bold text-lg transition-all shadow-xl"
+                className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-chart-1 hover:bg-chart-1/80 text-primary-foreground font-bold text-lg transition-colors"
               >
                 <Play className="w-5 h-5" />
                 Resume
               </button>
               <button
                 onClick={handleSettings}
-                className="px-8 py-4 rounded-xl bg-accent/80 backdrop-blur-sm hover:bg-accent font-bold text-lg transition-colors shadow-lg"
+                className="px-8 py-4 rounded-xl bg-accent hover:bg-accent/80 font-bold text-lg transition-colors"
               >
                 Settings
               </button>

@@ -4,58 +4,58 @@
 
 @layer base {
     :root {
-        --radius: 0.75rem;
-        --background: 0.15 0.02 120;
-        --foreground: 0.95 0.01 110;
-        --card: 0.2 0.03 115;
-        --card-foreground: 0.95 0.01 110;
-        --popover: 0.2 0.03 115;
-        --popover-foreground: 0.95 0.01 110;
-        --primary: 0.65 0.18 130;
+        --radius: 1rem;
+        --background: 0.1 0 0;
+        --foreground: 0.98 0 0;
+        --card: 0.15 0 0;
+        --card-foreground: 0.98 0 0;
+        --popover: 0.15 0 0;
+        --popover-foreground: 0.98 0 0;
+        --primary: 0.7 0.2 150;
         --primary-foreground: 0.98 0 0;
-        --secondary: 0.35 0.05 120;
-        --secondary-foreground: 0.95 0.01 110;
-        --muted: 0.3 0.03 115;
-        --muted-foreground: 0.55 0.02 115;
-        --accent: 0.25 0.04 118;
-        --accent-foreground: 0.95 0.01 110;
-        --destructive: 0.55 0.22 30;
+        --secondary: 0.25 0 0;
+        --secondary-foreground: 0.98 0 0;
+        --muted: 0.25 0 0;
+        --muted-foreground: 0.6 0 0;
+        --accent: 0.2 0 0;
+        --accent-foreground: 0.98 0 0;
+        --destructive: 0.6 0.25 25;
         --destructive-foreground: 0.98 0 0;
-        --border: 0.35 0.04 120;
-        --input: 0.35 0.04 120;
-        --ring: 0.65 0.18 130;
-        --chart-1: 0.68 0.19 135;
-        --chart-2: 0.75 0.22 85;
-        --chart-3: 0.62 0.16 145;
-        --chart-4: 0.78 0.24 75;
-        --chart-5: 0.58 0.14 125;
+        --border: 0.3 0 0;
+        --input: 0.3 0 0;
+        --ring: 0.7 0.2 150;
+        --chart-1: 0.75 0.25 160;
+        --chart-2: 0.7 0.22 200;
+        --chart-3: 0.65 0.2 280;
+        --chart-4: 0.8 0.25 60;
+        --chart-5: 0.75 0.23 320;
     }
 
     .dark {
-        --background: 0.12 0.03 125;
-        --foreground: 0.95 0.01 110;
-        --card: 0.18 0.04 120;
-        --card-foreground: 0.95 0.01 110;
-        --popover: 0.2 0.04 118;
-        --popover-foreground: 0.95 0.01 110;
-        --primary: 0.68 0.19 135;
+        --background: 0.1 0 0;
+        --foreground: 0.98 0 0;
+        --card: 0.15 0 0;
+        --card-foreground: 0.98 0 0;
+        --popover: 0.18 0 0;
+        --popover-foreground: 0.98 0 0;
+        --primary: 0.7 0.2 150;
         --primary-foreground: 0.98 0 0;
-        --secondary: 0.3 0.05 122;
-        --secondary-foreground: 0.95 0.01 110;
-        --muted: 0.28 0.04 118;
-        --muted-foreground: 0.58 0.02 115;
-        --accent: 0.22 0.05 120;
-        --accent-foreground: 0.95 0.01 110;
-        --destructive: 0.55 0.22 30;
+        --secondary: 0.25 0 0;
+        --secondary-foreground: 0.98 0 0;
+        --muted: 0.25 0 0;
+        --muted-foreground: 0.6 0 0;
+        --accent: 0.2 0 0;
+        --accent-foreground: 0.98 0 0;
+        --destructive: 0.6 0.25 25;
         --destructive-foreground: 0.98 0 0;
-        --border: 0.32 0.05 122;
-        --input: 0.32 0.05 122;
-        --ring: 0.68 0.19 135;
-        --chart-1: 0.68 0.19 135;
-        --chart-2: 0.75 0.22 85;
-        --chart-3: 0.62 0.16 145;
-        --chart-4: 0.78 0.24 75;
-        --chart-5: 0.58 0.14 125;
+        --border: 0.3 0 0;
+        --input: 0.3 0 0;
+        --ring: 0.7 0.2 150;
+        --chart-1: 0.75 0.25 160;
+        --chart-2: 0.7 0.22 200;
+        --chart-3: 0.65 0.2 280;
+        --chart-4: 0.8 0.25 60;
+        --chart-5: 0.75 0.23 320;
     }
 
     * {
@@ -70,34 +70,6 @@
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Space Grotesk', 'Inter', sans-serif;
         font-weight: 700;
-    }
-
-    /* Premium image rendering for high-DPI displays */
-    img {
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
-    }
-
-    /* Smooth backdrop blur support */
-    .backdrop-blur-sm,
-    .backdrop-blur-md,
-    .backdrop-blur-xl {
-        -webkit-backdrop-filter: blur(var(--tw-backdrop-blur));
-        backdrop-filter: blur(var(--tw-backdrop-blur));
-    }
-
-    /* Enhanced shadow system for AAA UI */
-    .shadow-2xl {
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Premium overlay treatment */
-    .premium-overlay {
-        background: linear-gradient(135deg, 
-            oklch(var(--card) / 0.6) 0%, 
-            oklch(var(--card) / 0.8) 100%);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
     }
 }
 

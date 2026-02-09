@@ -1,82 +1,188 @@
 {
   "kind": "build_request",
-  "title": "Upgrade all game graphics to AAA-level quality",
+  "title": "Build an extremely fun, addicting web game with progression and leaderboard",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-14",
-      "text": "Upgrade all visual art assets to AAA-level quality while keeping the current Pepe/toad-killer crypto meme aesthetic, including high-fidelity backgrounds, in-game sprites, and UI iconography, and ensure assets look crisp on high-DPI/retina displays.",
+      "id": "REQ-1",
+      "text": "Create a complete, playable, arcade-style game (single-player) that is immediately fun, easy to learn, and hard to master, with a core loop designed for repeated short runs (e.g., 30–120 seconds) and a clear fail state + instant restart.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages-3"
+          "msg-2"
         ],
         "quotes": [
-          "bring all the graphics to AAA level quality"
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
         ]
       },
       "acceptanceCriteria": [
-        "New high-fidelity raster assets exist under frontend/public/assets/generated using the filenames specified in this build request.",
-        "All upgraded assets render sharply (no visible pixelation) at common desktop and mobile resolutions.",
-        "No assets are served through the backend; all art is loaded from static files.",
-        "The game remains playable and performance remains stable (no obvious frame drops attributable to rendering changes)."
+        "Game loads into a playable state without requiring setup from the user",
+        "A run can be started within 1 click/tap from the landing screen",
+        "A run ends with an unambiguous fail state and shows a results screen (score + best score)",
+        "Restarting a run takes at most 1 interaction and does not require a full page reload"
       ]
     },
     {
-      "id": "REQ-15",
-      "text": "Improve the in-game canvas rendering fidelity in the 2D renderer to feel 'AAA': incorporate more detailed sprite rendering for player/tokens/hazards, better composition/lighting (e.g., layered/parallax background feel, vignette/atmospheric overlay), and higher-quality particles/VFX, while honoring the existing Reduced Motion setting.",
+      "id": "REQ-2",
+      "text": "Implement a polished game feel layer: responsive controls (keyboard + pointer/touch), hit feedback, screen shake/juice (subtle), particle/visual effects, and a difficulty curve that ramps over time to sustain challenge.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages-3"
+          "msg-2"
         ],
         "quotes": [
-          "bring all the graphics to AAA level quality"
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
         ]
       },
       "acceptanceCriteria": [
-        "The canvas scene (background, player, obstacles, power-ups, particles) no longer relies on simple fallback circles/glows when the new assets are available.",
-        "When Reduced Motion is enabled, any new camera/scene motion effects (e.g., shake/parallax) are disabled or substantially reduced, consistent with existing behavior.",
-        "Visual effects upgrades do not introduce gameplay logic changes (collision and scoring behavior remain unchanged)."
+        "Keyboard controls work on desktop and touch/pointer controls work on mobile",
+        "The difficulty increases during a run (e.g., speed/spawn rate/complexity) and is noticeable by 30 seconds",
+        "Collisions/damage/fail events provide clear feedback (visual + optional sound)",
+        "The game remains performant (stable frame rate) on a typical laptop browser"
       ]
     },
     {
-      "id": "REQ-16",
-      "text": "Upgrade the UI presentation to AAA-level visual polish across Landing, HUD, Results, Leaderboard, Settings, and Shop screens by using higher-quality graphical elements (e.g., premium backgrounds/overlays and a cohesive custom icon set where appropriate) while keeping all existing UI flows and English user-facing text intact.",
-      "target": "frontend",
+      "id": "REQ-3",
+      "text": "Add progression and retention hooks that do not require external services: persistent unlocks/skins/perks earned via play, a simple meta-currency, and at least one “just one more run” mechanic (e.g., near-miss bonus, streak multiplier, or risk/reward pickups).",
+      "target": "both",
       "source": {
         "messageIds": [
-          "recent-messages-3"
+          "msg-2"
         ],
         "quotes": [
-          "bring all the graphics to AAA level quality"
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
         ]
       },
       "acceptanceCriteria": [
-        "Landing and Results screens use the upgraded high-fidelity menu background and logo assets from frontend/public/assets/generated.",
-        "HUD/Dialogs/Shop/Leaderboard maintain the same functionality and navigation, but visuals look more premium (improved iconography/visual detail) without changing feature behavior.",
-        "All user-facing text remains English (no new non-English strings introduced)."
+        "Players earn a currency or progression points during/after runs",
+        "At least 3 unlockable items (e.g., cosmetics or minor gameplay perks) are available",
+        "Unlock/progression state persists across sessions for the same authenticated user",
+        "Progression cannot be trivially lost on refresh (after successful save)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Integrate Internet Identity sign-in and use it to associate saved progression and scores with the user; allow unauthenticated play but clearly prompt sign-in to save progress/submit scores.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can play without signing in",
+        "When signed in, the app shows the user is authenticated and enables saving/submitting",
+        "When not signed in, the UI communicates that progress/leaderboard submission requires sign-in"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement a backend-backed global leaderboard (e.g., daily and all-time) with basic anti-spam/anti-cheat constraints appropriate for a casual game (e.g., rate limits per principal, reasonable score validation, and server-side canonical best score tracking).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes methods to submit a run result and to fetch leaderboard entries",
+        "Leaderboard supports at least: all-time top N and a time-bounded board (e.g., daily)",
+        "Backend stores a user’s best score and does not allow unlimited rapid submissions (basic throttling)",
+        "Frontend displays leaderboards with the current user’s position/best score when signed in"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Create a cohesive, distinctive visual theme for the entire game UI (colors, typography, layout, and motion language) and apply it consistently across menus, HUD, results screen, and leaderboard. Do not use a blue/purple default theme.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A single, coherent theme is evident across all screens (HUD, menus, modals, leaderboard)",
+        "Theme includes a defined palette, typography choices, and consistent component styling",
+        "No default-looking unthemed UI remains (e.g., plain browser buttons)",
+        "The chosen theme does not rely on a blue/purple primary palette"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add player-facing settings and accessibility basics: volume toggle, reduced motion toggle, control remapping (at least for primary actions on keyboard), and a pause/resume flow.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Player can pause and resume a run without breaking game state",
+        "Sound can be muted/unmuted and the choice persists locally",
+        "A reduced-motion option disables or significantly reduces screen shake and intense motion effects",
+        "Primary keyboard action(s) can be remapped in settings"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Add generated static art assets for the game (logo, background/scene art, and a small set of icons) and render them in the UI from frontend static files (do not serve images through the backend).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Build an extremely fun and addicting game for me. I give you full permission to do whatever you see fit!"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images are stored under frontend/public/assets/generated",
+        "The app uses the generated logo on the title/landing screen",
+        "At least one generated background/scene image is used in the UI (e.g., landing/results)",
+        "Icons are used in HUD/buttons (e.g., sound, pause, currency)"
       ]
     }
   ],
   "constraints": [
-    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui/*.",
-    "Do not serve images through the backend; all graphics must be static assets under frontend/public/assets/generated and referenced from the frontend.",
-    "Respect the existing single-actor backend architecture; no backend changes are required for this graphics-only request."
+    "Backend must remain a single Motoko actor (all logic in the main actor file)",
+    "Do not edit files under frontend/src/components/ui (compose them instead)",
+    "Do not edit immutable hook/bootstrap paths listed in SYSTEM_CONTEXT; integrate via new components/pages/hooks where needed",
+    "No external databases or third-party auth providers; Internet Identity only"
   ],
   "nonGoals": [
-    "Do not change gameplay rules, difficulty curve, scoring, progression logic, or leaderboard logic as part of this request.",
-    "Do not add third-party services or external asset hosting/CDNs.",
-    "Do not introduce new authentication methods beyond the existing Internet Identity integration."
+    "Multiplayer or real-time gameplay",
+    "WebSocket-based features (chat/live updates)",
+    "External analytics, ads, push notifications, or email integrations",
+    "Payments or in-app purchases"
   ],
   "imageRequirements": {
-    "required": [],
-    "edits": [
-      "Retheme the existing game logo to a Pepe/toad-killer crypto meme aesthetic (game-logo.dim_512x512.png > game-logo.dim_512x512.png)",
-      "Retheme the existing menu/results background to a Pepe/toad-killer crypto meme aesthetic (menu-background.dim_1920x1080.png > menu-background.dim_1920x1080.png)",
-      "Increase detail/texture and add premium lighting/shading while keeping the same composition (ingame-background.dim_1920x1080.png > ingame-background.dim_1920x1080.png)",
-      "Increase detail/texture and add premium lighting/shading while keeping the same silhouette readability (token-icon.dim_256x256.png > token-icon.dim_256x256.png)",
-      "Increase detail/texture and add premium lighting/shading while keeping the same silhouette readability (toad-hazard-icon.dim_256x256.png > toad-hazard-icon.dim_256x256.png)"
-    ]
+    "required": [
+      "Arcade game logo with bold, playful typography and simple emblem (game-logo.dim_512x512.png)",
+      "High-energy illustrated background with dynamic shapes and motion lines (menu-background.dim_1920x1080.png)",
+      "Set of minimal, high-contrast UI icons (pause, play, sound on/off, trophy, coin) as a cohesive set (ui-icons-sheet.dim_1024x1024.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }
